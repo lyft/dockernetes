@@ -1,0 +1,16 @@
+[Unit]
+Description=Kubernetes Kubelet Server
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+After=kube-proxy.service kubelet.service etcd.service kube-apiserver.service kube-controller-manager.service kube-scheduler.service
+Requires=kube-proxy.service kubelet.service etcd.service kube-apiserver.service kube-controller-manager.service kube-scheduler.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/kubectl create -f /etc/kubernetes/manifests/coredns.yaml
+ExecStart=/usr/bin/kubectl -n kube-system rollout status deployment coredns
+Restart=no
+KillMode=process
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
